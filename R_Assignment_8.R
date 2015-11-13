@@ -7,3 +7,6 @@ colnames(mammal_sizes) <- c("continent", "status", "order",
 head(mammal_sizes)
 
 
+
+
+
