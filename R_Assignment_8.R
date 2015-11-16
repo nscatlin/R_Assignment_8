@@ -1,5 +1,6 @@
-library(dpylr)
-library(stringr)
+library("dplyr")
+library("stringr")
+
 
 mammal_sizes <- read.csv("MOMv3.3.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE, na.strings = "-999")
 
@@ -13,11 +14,36 @@ colnames(mammal_sizes) <- c("continent", "status", "order",
 # - calculate mean mass of extinct species
 # - calculate mean mass extant species
 
-mean_mass_extinct <- if(mammal_sizes$status == "extinct")
+#mean(mammal_sizes$combined_mass)[mammal_sizes$status == 'extinct']
 
+### pseudo code
+# for (line in mammal_sizes){
+#   if (mammal_sizes$status =="extinct"){
+#     print(mean(mammal_sizes$combined_mass))
+#   }
+# }
+#!!!!!!DLYR!!!!!!
 
+#Figuring out average mass for EXTINCT species
+status_extinct <- group_by(mammal_sizes, status)
+summ_extinct <- summarize(status_extinct, mean_weight = (mean(na.omit(combined_mass))))
+avg_mass_extinct <- summ_extinct[summ_extinct$status == "extinct",]
 
+#Figuring out average mass for EXTANT species
+status_extant <- group_by(mammal_sizes, status)
+summ_extant <- summarize(status_extant, mean_weight = (mean(na.omit(combined_mass))))
+avg_mass_extant <- summ_extant[summ_extant$status == "extant",]
 
+# Avg. mass for both extinct and extant
+avg_mass_extinct$mean_weight; avg_mass_extant$mean_weight
 
+#1.3
+# mean masses within each of the different continents
 
+status_continent_extinct <- group_by(mammal_sizes, status, continent)
+summ_stat_cont_extinct <- summarize(status_continent_extinct, mean_weight = (mean(na.omit(combined_mass))))
+avg_mass_stat_cont_extinct <- summ_stat_cont_extinct [summ_stat_cont_extinct$status == "extant" &&
+                                                      summ_stat_cont_extinct$status == "extant" ,]
+
+avg_mass_stat_cont_extinct
 
