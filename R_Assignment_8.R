@@ -42,8 +42,15 @@ avg_mass_extinct$mean_weight; avg_mass_extant$mean_weight
 
 status_continent_extinct <- group_by(mammal_sizes, status, continent)
 summ_stat_cont_extinct <- summarize(status_continent_extinct, mean_weight = (mean(na.omit(combined_mass))))
-avg_mass_stat_cont_extinct <- summ_stat_cont_extinct [summ_stat_cont_extinct$status == "extant" &&
-                                                      summ_stat_cont_extinct$status == "extant" ,]
+avg_mass_stat_cont_extinct <- summ_stat_cont_extinct[summ_stat_cont_extinct$status == "extinct",]
 
 avg_mass_stat_cont_extinct
+
+
+status_continent_extant <- group_by(mammal_sizes, status, continent)
+summ_stat_cont_extant <- summarize(status_continent_extant, mean_weight = (mean(na.omit(combined_mass))))
+avg_mass_stat_cont_extant <- summ_stat_cont_extant[summ_stat_cont_extant$status == "extant",]
+
+avg_mass_stat_cont_extant
+
 
