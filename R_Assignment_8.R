@@ -55,10 +55,10 @@ avg_mass_stat_cont_extant <- summ_stat_cont_extant[summ_stat_cont_extant$status 
 
 #Binding the two datasets together
 avg_mass_stat_cont_extinct_and_extant <- rbind(avg_mass_stat_cont_extant, avg_mass_stat_cont_extinct)
-avg_mass_stat_cont_extinct_and_extant  %>% 
+spread_data<- avg_mass_stat_cont_extinct_and_extant  %>% 
 spread(status, mean_weight) 
 
 # Sending it to a CSV file named 'continent_mass_differences.csv'
-write.csv(df_id_lengthclass_gc, file = "data/Catlin_Granger.csv", row.names=FALSE)
+write.csv(spread_data, file = "continent_mass_differences.csv", row.names=FALSE)
 
 
