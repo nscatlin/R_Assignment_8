@@ -83,6 +83,9 @@ extinct_nos <- ggplot(extinct_mammals, aes(x = log_mass)) +
   ggtitle("Extinct") +
   facet_grid(continent ~ .) 
 
+ggsave("Extinct_log_mass_continent_counts.png" )
+
+
 # Plot of Extant Mammals
 extant_nos <- ggplot(extant_mammals, aes(x = log_mass)) +
   geom_bar() +
@@ -90,23 +93,29 @@ extant_nos <- ggplot(extant_mammals, aes(x = log_mass)) +
   ylab("Number of Species") +
   xlab("Log Mass") +
   ggtitle("Extant") +
-  facet_grid(continent ~ .) 
+  facet_grid(continent ~ .)
+
+ggsave("Extant_log_mass_continent_counts.png" )
+
 
 grid.arrange(extant_nos, extinct_nos, ncol = 2)
 
-#################### WHAT IS GOING ON????????? #########################
-
-#Find a way to save grid.arrange to png
-
-arrangeGrob(extant_nos, extinct_nos, ncol = 2) %>% 
-  ggsave("Mammal_log_mass_continent_counts.png")
+#################### WHAT IS GOING ON ABOVE????????? #########################
 
 
 
-ggsave <- ggplot2::ggsave; body(ggsave) <- body(ggplot2::ggsave)[-2]
-g <- arrangeGrob(extant_nos, extinct_nos, ncol = 2) 
-ggsave("Mammal_log_mass_continent_counts.png", g)
+
+# This should have worked???
 
 
+# Find a way to save grid.arrange to png
+# I got this below code from online since I was getting errors that plots must be ggplots. 
+# http://stackoverflow.com/questions/17059099/saving-grid-arrange-plot-to-file/17075381#17075381
 
-png("Mammal_log_mass_continent_counts.png"); grid.arrange(extant_nos, extinct_nos, ncol = 2);
+# ggsave <- ggplot2::ggsave; body(ggsave) <- body(ggplot2::ggsave)[-2]
+# g <- arrangeGrob(extant_nos, extinct_nos, ncol = 2) 
+# ggsave("Mammal_log_mass_continent_counts.png", g)
+# 
+# 
+# 
+# png("Mammal_log_mass_continent_counts.png"); grid.arrange(extant_nos, extinct_nos, ncol = 2);
