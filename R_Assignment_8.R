@@ -11,19 +11,13 @@ colnames(mammal_sizes) <- c("continent", "status", "order",
 
 #the above wash pushed to the Github Repostitory named 'R_Assignment_8'
 
-#1.2, 
+#######
+# 1.2 #
+#######
+
 # - calculate mean mass of extinct species
 # - calculate mean mass extant species
 
-#mean(mammal_sizes$combined_mass)[mammal_sizes$status == 'extinct']
-
-### pseudo code
-# for (line in mammal_sizes){
-#   if (mammal_sizes$status =="extinct"){
-#     print(mean(mammal_sizes$combined_mass))
-#   }
-# }
-#!!!!!!DLYR!!!!!!
 
 #Figuring out average mass for EXTINCT species
 status_extinct <- group_by(mammal_sizes, status)
@@ -38,7 +32,10 @@ avg_mass_extant <- summ_extant[summ_extant$status == "extant",]
 # Avg. mass for both extinct and extant
 avg_mass_extinct$mean_weight; avg_mass_extant$mean_weight
 
-#1.3
+#######
+# 1.3 #
+#######
+
 # mean masses within each of the different continents
 
 # Getting rid of continent Af which is screwing up the dataset (is full of null values anyways)
@@ -62,7 +59,10 @@ spread_data<- avg_mass_stat_cont_extinct_and_extant  %>%
 # Sending it to a CSV file named 'continent_mass_differences.csv'
 write.csv(spread_data, file = "continent_mass_differences.csv", row.names=FALSE)
 
-# 1.4
+#######
+# 1.4 #
+#######
+
 # Make a graph that shows the data for each continent that you think is worth visualizing.
 
 # Partitioning to only have EXTINCT mammals
