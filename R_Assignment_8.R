@@ -9,12 +9,21 @@ colnames(mammal_sizes) <- c("continent", "status", "order",
                             "family", "genus", "species", "log_mass", "combined_mass", 
                             "reference")
 
-
 #the above wash pushed to the Github Repostitory named 'R_Assignment_8'
 
-#######
-# 1.2 # 
-#######
+#1.2, 
+# - calculate mean mass of extinct species
+# - calculate mean mass extant species
+
+#mean(mammal_sizes$combined_mass)[mammal_sizes$status == 'extinct']
+
+### pseudo code
+# for (line in mammal_sizes){
+#   if (mammal_sizes$status =="extinct"){
+#     print(mean(mammal_sizes$combined_mass))
+#   }
+# }
+#!!!!!!DLYR!!!!!!
 
 #Figuring out average mass for EXTINCT species
 status_extinct <- group_by(mammal_sizes, status)
@@ -29,10 +38,7 @@ avg_mass_extant <- summ_extant[summ_extant$status == "extant",]
 # Avg. mass for both extinct and extant
 avg_mass_extinct$mean_weight; avg_mass_extant$mean_weight
 
-#######
-# 1.3 #
-#######
-
+#1.3
 # mean masses within each of the different continents
 
 # Getting rid of continent Af which is screwing up the dataset (is full of null values anyways)
@@ -51,15 +57,12 @@ avg_mass_stat_cont_extant <- summ_stat_cont_extant[summ_stat_cont_extant$status 
 #Binding the two datasets together
 avg_mass_stat_cont_extinct_and_extant <- rbind(avg_mass_stat_cont_extant, avg_mass_stat_cont_extinct)
 spread_data<- avg_mass_stat_cont_extinct_and_extant  %>% 
-spread(status, mean_weight) 
+  spread(status, mean_weight) 
 
 # Sending it to a CSV file named 'continent_mass_differences.csv'
 write.csv(spread_data, file = "continent_mass_differences.csv", row.names=FALSE)
 
-#######
-# 1.4 #
-#######
-
+# 1.4
 # Make a graph that shows the data for each continent that you think is worth visualizing.
 
 # Partitioning to only have EXTINCT mammals
@@ -70,8 +73,6 @@ extinct_mammals <- data.frame(mammal_sizes) %>%
 extant_mammals <- data.frame(mammal_sizes) %>%
   filter(status == "extant")
 
-#Making sure I can see both plots (code below)
-par(mfrow=c(2, 1))
 
 # Plot of Extinct Mammals
 extinct_nos <- ggplot(extinct_mammals, aes(x = log_mass)) +
@@ -91,12 +92,21 @@ extant_nos <- ggplot(extant_mammals, aes(x = log_mass)) +
   ggtitle("Extant") +
   facet_grid(continent ~ .) 
 
-grid.arrange(extant_nos, extinct_nos, ncol = 2); png("Mammal_log_mass_continent_counts.png"); grid.arrange(extant_nos, extinct_nos, ncol = 2)
+grid.arrange(extant_nos, extinct_nos, ncol = 2)
 
-# Find a way to save grid.arrange to png
-  # I got this below code from online since I was getting errors that plots must be ggplots. 
-  # http://stackoverflow.com/questions/17059099/saving-grid-arrange-plot-to-file/17075381#17075381
+#################### WHAT IS GOING ON????????? #########################
+
+#Find a way to save grid.arrange to png
+
+arrangeGrob(extant_nos, extinct_nos, ncol = 2) %>% 
+  ggsave("Mammal_log_mass_continent_counts.png")
+
+
 
 ggsave <- ggplot2::ggsave; body(ggsave) <- body(ggplot2::ggsave)[-2]
 g <- arrangeGrob(extant_nos, extinct_nos, ncol = 2) 
 ggsave("Mammal_log_mass_continent_counts.png", g)
+
+
+
+png("Mammal_log_mass_continent_counts.png"); grid.arrange(extant_nos, extinct_nos, ncol = 2);
