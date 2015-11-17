@@ -1,6 +1,7 @@
 library("dplyr")
-
 library("tidyr")
+library("ggplot2")
+
 
 mammal_sizes <- read.csv("MOMv3.3.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE, na.strings = "-999")
 
@@ -61,4 +62,15 @@ spread(status, mean_weight)
 # Sending it to a CSV file named 'continent_mass_differences.csv'
 write.csv(spread_data, file = "continent_mass_differences.csv", row.names=FALSE)
 
+# 1.4
+# Make a graph that shows the data for each continent that you think is worth visualizing.
+NA_mammals <- data.frame(mammal_sizes) %>%
+  filter(continent == "NA",status == "extinct")
+  
+head(NA_mammals)
+ggplot(NA_mammals, aes(x = log_mass, y = status)) +
+  geom_density() +
+  ylab("Number of Species") +
+  xlab("Log Mass") +
+  facet_grid(~continent)
 
