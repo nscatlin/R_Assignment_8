@@ -1,6 +1,6 @@
 library("dplyr")
-library("stringr")
 
+library("tidyr")
 
 mammal_sizes <- read.csv("MOMv3.3.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE, na.strings = "-999")
 
@@ -40,17 +40,20 @@ avg_mass_extinct$mean_weight; avg_mass_extant$mean_weight
 #1.3
 # mean masses within each of the different continents
 
+# Getting rid of continent Af which is screwing up the dataset (is full of null values anyways)
+mammal_sizes <- mammal_sizes[mammal_sizes$continent != "Af",]
+
+# Extinct mass averages by continent
 status_continent_extinct <- group_by(mammal_sizes, status, continent)
 summ_stat_cont_extinct <- summarize(status_continent_extinct, mean_weight = (mean(na.omit(combined_mass))))
 avg_mass_stat_cont_extinct <- summ_stat_cont_extinct[summ_stat_cont_extinct$status == "extinct",]
 
-avg_mass_stat_cont_extinct
-
-
+# Extant mass averages by continent
 status_continent_extant <- group_by(mammal_sizes, status, continent)
 summ_stat_cont_extant <- summarize(status_continent_extant, mean_weight = (mean(na.omit(combined_mass))))
 avg_mass_stat_cont_extant <- summ_stat_cont_extant[summ_stat_cont_extant$status == "extant",]
 
-avg_mass_stat_cont_extant
-
-
+#Binding the two datasets together
+avg_mass_stat_cont_extinct_and_extant <- rbind(avg_mass_stat_cont_extant, avg_mass_stat_cont_extinct)
+avg_mass_stat_cont_extinct_and_extant
+as.vector(avg_mass_stat_cont_extinct_and_extant)
