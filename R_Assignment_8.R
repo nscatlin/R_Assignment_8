@@ -1,8 +1,8 @@
 library("dplyr")
 library("tidyr")
 library("ggplot2")
-
-
+#install.packages("gridExtra")
+library("gridExtra")
 mammal_sizes <- read.csv("MOMv3.3.txt", sep = "\t", header = FALSE, stringsAsFactors = FALSE, na.strings = "-999")
 
 colnames(mammal_sizes) <- c("continent", "status", "order", 
@@ -64,13 +64,34 @@ write.csv(spread_data, file = "continent_mass_differences.csv", row.names=FALSE)
 
 # 1.4
 # Make a graph that shows the data for each continent that you think is worth visualizing.
-NA_mammals <- data.frame(mammal_sizes) %>%
-  filter(continent == "NA",status == "extinct")
-  
-head(NA_mammals)
-ggplot(NA_mammals, aes(x = log_mass, y = status)) +
-  geom_density() +
+
+# Partitioning to only have EXTINCT mammals
+extinct_mammals <- data.frame(mammal_sizes) %>%
+  filter(status == "extinct")
+
+# Partitioning to only have EXTANT mammals
+extant_mammals <- data.frame(mammal_sizes) %>%
+  filter(status == "extant")
+
+#Making sure I can see both plots (code below)
+par(mfrow=c(2, 1))
+
+# Plot of Extinct Mammals
+extinct_nos <- ggplot(extinct_mammals, aes(x = log_mass)) +
+  geom_bar() +
+  ylim(0,100) +
   ylab("Number of Species") +
   xlab("Log Mass") +
-  facet_grid(~continent)
+  ggtitle("Extinct") +
+  facet_grid(continent ~ .) 
 
+# Plot of Extant Mammals
+extant_nos <- ggplot(extant_mammals, aes(x = log_mass)) +
+  geom_bar() +
+  ylim(0,100) +
+  ylab("Number of Species") +
+  xlab("Log Mass") +
+  ggtitle("Extant") +
+  facet_grid(continent ~ .) 
+
+grid.arrange(extant_nos, extinct_nos, ncol = 2)
