@@ -94,4 +94,11 @@ extant_nos <- ggplot(extant_mammals, aes(x = log_mass)) +
   ggtitle("Extant") +
   facet_grid(continent ~ .) 
 
-grid.arrange(extant_nos, extinct_nos, ncol = 2)
+grid.arrange(extant_nos, extinct_nos, ncol = 2); png("Mammal_log_mass_continent_counts.png"); grid.arrange(extant_nos, extinct_nos, ncol = 2)
+
+# Find a way to save grid.arrange to png
+# I got this below code from online since I was getting errors that plots must be ggplots. 
+# http://stackoverflow.com/questions/17059099/saving-grid-arrange-plot-to-file/17075381#17075381
+ggsave <- ggplot2::ggsave; body(ggsave) <- body(ggplot2::ggsave)[-2]
+g <- arrangeGrob(extant_nos, extinct_nos, ncol = 2) 
+ggsave("Mammal_log_mass_continent_counts.png", g)
